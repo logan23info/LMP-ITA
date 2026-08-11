@@ -1,0 +1,37 @@
+# Core LLM + fine-tuning
+transformers>=4.40.0
+peft>=0.10.0
+trl>=0.8.6
+bitsandbytes>=0.43.0
+accelerate>=0.29.0
+datasets>=2.19.0
+
+# Inference
+ollama>=0.1.9
+
+# Embeddings + vector store
+sentence-transformers>=2.7.0
+chromadb>=0.5.0
+
+# Document parsing
+unstructured[pdf,docx]>=0.13.0
+pymupdf>=1.24.0
+openpyxl>=3.1.2
+pandas>=2.2.0
+
+# Agent framework
+langchain>=0.2.0
+langchain-community>=0.2.0
+langgraph>=0.1.0
+
+# Hugging Face Hub
+huggingface-hub>=0.23.0
+
+# UI
+gradio>=4.31.0
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0.0
+rich>=13.7.0
+typer>=0.12.0

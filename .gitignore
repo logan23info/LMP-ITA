@@ -1,0 +1,41 @@
+# Environment and secrets
+.env
+*.key
+*.pem
+
+# NEVER commit real audit data
+data/real/
+data/client/
+data/evidence/
+*.xlsx
+*.pdf
+*.docx
+# Exception: keep synthetic JSONL samples
+!data/synthetic/*.jsonl
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# Model weights (too large for git)
+*.bin
+*.safetensors
+*.gguf
+audit-llm-adapter/
+chroma_db/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

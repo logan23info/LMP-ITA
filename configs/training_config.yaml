@@ -1,0 +1,60 @@
+# LoRA Fine-tuning Configuration
+# Optimised for Google Colab free T4 (16GB VRAM)
+
+model:
+  base_model: "mistralai/Mistral-7B-Instruct-v0.3"
+  # Fallback for less VRAM: "microsoft/Phi-3-mini-4k-instruct"
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: "float16"
+  bnb_4bit_quant_type: "nf4"
+  use_nested_quant: false
+
+lora:
+  r: 16                    # LoRA rank — higher = more capacity, more VRAM
+  lora_alpha: 32           # Scaling factor (usually 2x rank)
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:          # Mistral attention layers
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  output_dir: "./audit-llm-adapter"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4   # effective batch = 8
+  learning_rate: 2.0e-4
+  weight_decay: 0.001
+  warmup_ratio: 0.03
+  lr_scheduler_type: "cosine"
+  save_steps: 50
+  logging_steps: 10
+  max_seq_length: 2048
+  fp16: true
+  group_by_length: true
+  report_to: "none"        # set to "wandb" if you want experiment tracking
+
+data:
+  train_file: "data/synthetic/audit_qa_pairs.jsonl"
+  # Format: {"control_id":..., "question":..., "answer":...}
+  # Add your own examples following this schema
+  val_split: 0.1
+  prompt_template: |
+    <s>[INST] You are an expert IT Internal Auditor specialising in IT General Controls (ITGC).
+    Your role is to review evidence, test controls, and produce structured audit findings
+    following professional standards (IIA, COBIT, SOX ITGC).
+
+    {question} [/INST]
+
+    {answer} </s>
+
+huggingface:
+  push_to_hub: true
+  hub_model_id: "YOUR_HF_USERNAME/audit-llm-adapter"  # change this
+  hub_private: true        # keep your adapter private

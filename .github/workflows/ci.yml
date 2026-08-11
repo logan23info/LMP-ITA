@@ -1,0 +1,42 @@
+name: IT Audit LLM CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
+      - name: Install dependencies (CPU only, no GPU libs)
+        run: |
+          pip install pytest pyyaml sentence-transformers chromadb \
+                      langchain langchain-community langgraph \
+                      datasets huggingface-hub rich typer
+
+      - name: Validate training data format
+        run: python scripts/prepare_training_data.py --validate-only
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+      - name: Check no real data committed
+        run: |
+          # Fail if any file in data/ is larger than 1MB (synthetic data should be tiny)
+          find data/ -type f -size +1M -exec echo "WARNING: Large file found: {}" \; -exec exit 1 \;
+          echo "Data size check passed."

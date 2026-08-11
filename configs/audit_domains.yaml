@@ -1,0 +1,101 @@
+# IT Audit Domain Configuration
+# Defines control domains, objectives, and system prompts
+
+system_prompt: |
+  You are an expert IT Internal Auditor specialising in IT General Controls (ITGC).
+  You follow IIA standards, COBIT 2019 framework, and SOX ITGC requirements.
+  Always produce structured findings with: Condition, Criteria, Cause, Effect, Risk Rating, and Recommendation.
+  Cite specific evidence when available. Be precise, professional, and objective.
+
+domains:
+  UAM:
+    name: "User Access Management"
+    control_objectives:
+      - "Access is granted based on least privilege and need-to-know"
+      - "Periodic access reviews are performed and documented"
+      - "Terminated user accounts are deprovisioned within SLA"
+      - "Privileged access is restricted and monitored"
+      - "Segregation of duties conflicts are identified and resolved"
+    key_controls:
+      - id: "ITGC-UAM-01"
+        name: "Periodic access review"
+        frequency: "Quarterly"
+        evidence: ["Access review sign-off", "User list before/after", "Reviewer approval emails"]
+      - id: "ITGC-UAM-02"
+        name: "Termination process"
+        frequency: "Per event"
+        sla: "24 hours"
+        evidence: ["HR termination record", "AD disable timestamp", "System access log"]
+      - id: "ITGC-UAM-03"
+        name: "Privileged access management"
+        frequency: "Quarterly review"
+        evidence: ["Privileged user list", "Approval justification", "MFA enforcement log"]
+      - id: "ITGC-UAM-04"
+        name: "Segregation of duties"
+        frequency: "Continuous / Quarterly"
+        evidence: ["SoD matrix", "Role assignment report", "Conflict exception approvals"]
+
+  CHG:
+    name: "Change Management"
+    control_objectives:
+      - "All changes are authorized before implementation"
+      - "Changes are tested (UAT) before production deployment"
+      - "Emergency changes have compensating controls"
+      - "Change log is complete and accurate"
+    key_controls:
+      - id: "ITGC-CHG-01"
+        name: "Change authorization"
+        frequency: "Per change"
+        evidence: ["CAB approval record", "Change ticket with approver sign-off"]
+      - id: "ITGC-CHG-02"
+        name: "UAT completion"
+        frequency: "Per change"
+        evidence: ["UAT sign-off document", "Test results", "Business owner approval"]
+      - id: "ITGC-CHG-03"
+        name: "Emergency change controls"
+        frequency: "Per emergency change"
+        evidence: ["Emergency CAB record", "Post-implementation review", "CISO approval"]
+
+  OPS:
+    name: "IT Operations"
+    control_objectives:
+      - "Backups are performed and restorable"
+      - "Incidents are logged, tracked, and resolved"
+      - "System availability meets SLA"
+      - "Monitoring and alerting is effective"
+    key_controls:
+      - id: "ITGC-OPS-01"
+        name: "Backup and restore testing"
+        frequency: "Quarterly"
+        evidence: ["Backup job logs", "Restore test report", "Sign-off by IT Ops manager"]
+      - id: "ITGC-OPS-02"
+        name: "Incident management"
+        frequency: "Continuous"
+        evidence: ["Incident log", "Resolution timestamps", "RCA for P1 incidents"]
+
+  SEC:
+    name: "IT Security"
+    control_objectives:
+      - "Vulnerabilities are identified and remediated within SLA"
+      - "Security patches are applied timely"
+      - "Security monitoring and alerting is operational"
+    key_controls:
+      - id: "ITGC-SEC-01"
+        name: "Vulnerability management"
+        frequency: "Monthly scan, patch per SLA"
+        sla: "Critical: 30 days, High: 60 days"
+        evidence: ["Vulnerability scan report", "Patch history", "Remediation tickets"]
+
+risk_ratings:
+  Critical:
+    description: "Immediate threat to data integrity, financial reporting, or regulatory compliance"
+    response_time: "Immediate — within 5 business days"
+  High:
+    description: "Significant control weakness with material impact potential"
+    response_time: "Within 30 days"
+  Medium:
+    description: "Control weakness with limited impact if other controls compensate"
+    response_time: "Within 60 days"
+  Low:
+    description: "Minor process improvement opportunity"
+    response_time: "Within 90 days"
