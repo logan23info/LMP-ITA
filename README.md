@@ -1,4 +1,4 @@
-# IT Internal Audit LLM
+# IT IA LLM
 
 An open-source, on-premise AI system for IT General Controls (ITGC) testing and evidence review.
 Built with Mistral 7B + LoRA fine-tuning + RAG + LangGraph agentic engine.
