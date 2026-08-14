@@ -37,7 +37,6 @@ training:
   logging_steps: 10
   max_seq_length: 2048
   fp16: true
-  group_by_length: true
   report_to: "none"        # set to "wandb" if you want experiment tracking
 
 data:
