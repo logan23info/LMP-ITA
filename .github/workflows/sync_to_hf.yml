@@ -1,0 +1,27 @@
+name: Sync to HF Spaces
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to HF Spaces
+        uses: huggingface/huggingface-hub-action@main
+        with:
+          source-path: .
+          repo-id: Logan23info/lmp-ita-audit
+          repo-type: space
+          token: ${{ secrets.HF_TOKEN }}
+          ignore-patterns: "venv/,chroma_db/,*.gguf,.env"
+EOF
+
+git add .github/workflows/sync_to_hf.yml
+git commit -m "feat: auto-sync GitHub to HF Spaces"
+git push origin main
